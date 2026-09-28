@@ -1,0 +1,99 @@
+<mat-toolbar class="glass !fixed top-0 left-0 right-0 z-50 h-[76px] px-4 md:px-8 shadow-sm flex items-center gap-4 border-b border-white/20">
+  <div class="flex items-center gap-3 cursor-pointer group flex-none" routerLink="/courses">
+    <div class="w-11 h-11 rounded-[14px] bg-gradient-to-tr from-edutrack-primary to-edutrack-secondary flex items-center justify-center text-white font-black text-2xl shadow-xl shadow-indigo-500/20">
+      E
+    </div>
+    <div class="hidden lg:block leading-none">
+      <span class="text-2xl font-black text-slate-950 tracking-tighter">EduTrack</span>
+      <p class="text-[10px] font-black uppercase tracking-[0.2em] text-slate-400 mt-1">Cours en ligne</p>
+    </div>
+  </div>
+
+  <nav class="hidden xl:flex items-center gap-1 flex-none ml-4">
+    @for (link of navLinks(); track link.path) {
+      <a [routerLink]="link.path" routerLinkActive="!bg-edutrack-primary/5 !text-edutrack-primary font-bold"
+        class="px-3 py-2 rounded-xl text-slate-500 hover:text-edutrack-primary hover:bg-slate-50 transition-all text-sm font-bold flex items-center gap-2">
+        <mat-icon class="!text-[18px] !w-[18px] !h-[18px]">{{ link.icon }}</mat-icon>
+        {{ link.label }}
+      </a>
+    }
+  </nav>
+
+  <div class="flex-1 max-w-md mx-auto hidden sm:flex items-center relative group">
+    <mat-icon class="absolute left-4 text-slate-400 group-focus-within:text-edutrack-primary transition-colors">search</mat-icon>
+    <input type="text" [(ngModel)]="searchQuery" (keyup.enter)="onSearch()" placeholder="Rechercher un cours..."
+      class="w-full bg-slate-100/50 border-none rounded-2xl py-3 pl-12 pr-4 text-sm font-medium focus:ring-2 focus:ring-edutrack-primary/20 focus:bg-white transition-all outline-none text-slate-700">
+  </div>
+
+  <div class="flex items-center gap-2 md:gap-4 flex-none ml-auto">
+    @if (userRole() !== 'GUEST') {
+      <button mat-button [matMenuTriggerFor]="profileMenu" class="!rounded-2xl !h-12 !px-3 hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100">
+        <div class="flex items-center gap-3">
+          <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-edutrack-primary to-edutrack-secondary text-white flex items-center justify-center font-black text-xs shadow-md">
+            {{ userRole() | slice:0:1 }}
+          </div>
+          <div class="hidden lg:flex flex-col items-start leading-none text-left">
+            <span class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-0.5">Role</span>
+            <span class="text-xs font-bold text-slate-700">{{ roleLabel() }}</span>
+          </div>
+          <mat-icon class="text-slate-400 scale-75">expand_more</mat-icon>
+        </div>
+      </button>
+
+      <mat-menu #profileMenu="matMenu" class="premium-menu">
+        <div class="px-6 py-4 border-b border-slate-50 mb-1">
+          <p class="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-1">Session active</p>
+          <p class="text-sm font-bold text-slate-900">{{ roleLabel() }}</p>
+        </div>
+        <button mat-menu-item [routerLink]="dashboardPath()">
+          <mat-icon class="text-slate-400">dashboard_customize</mat-icon>
+          <span class="font-bold text-slate-700 text-sm">Tableau de bord</span>
+        </button>
+        <button mat-menu-item routerLink="/profile">
+          <mat-icon class="text-slate-400">settings_account_box</mat-icon>
+          <span class="font-bold text-slate-700 text-sm">Mon profil</span>
+        </button>
+        <button mat-menu-item (click)="logout()" class="!text-rose-600">
+          <mat-icon class="!text-rose-600">power_settings_new</mat-icon>
+          <span class="font-black text-sm uppercase tracking-widest">Deconnexion</span>
+        </button>
+      </mat-menu>
+    } @else {
+      <button routerLink="/login" class="hidden sm:flex items-center gap-2 bg-slate-900 text-white px-6 py-2.5 rounded-2xl font-bold text-xs uppercase tracking-widest hover:bg-edutrack-primary transition-all shadow-lg shadow-slate-900/10">
+        <mat-icon class="scale-75">login</mat-icon>
+        Connexion
+      </button>
+    }
+
+    <button mat-icon-button class="xl:hidden !w-12 !h-12 !rounded-2xl bg-slate-100 text-slate-600" (click)="toggleMobileMenu()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </div>
+</mat-toolbar>
+
+@if (isMobileMenuOpen()) {
+  <div class="fixed inset-0 z-[60] bg-slate-900/40 backdrop-blur-md xl:hidden" (click)="toggleMobileMenu()"></div>
+  <div class="fixed inset-y-0 right-0 z-[70] w-80 max-w-[88vw] bg-white shadow-2xl p-7 xl:hidden flex flex-col">
+    <div class="flex justify-between items-center mb-10">
+      <span class="font-black text-2xl tracking-tighter text-slate-900">EduTrack</span>
+      <button mat-icon-button (click)="toggleMobileMenu()" class="bg-slate-50 rounded-xl"><mat-icon>close</mat-icon></button>
+    </div>
+    <nav class="flex flex-col gap-2 mb-auto">
+      @for (link of navLinks(); track link.path) {
+        <a [routerLink]="link.path" routerLinkActive="bg-indigo-50 text-indigo-700" class="p-4 rounded-2xl text-slate-600 hover:text-edutrack-primary hover:bg-slate-50 transition-all font-bold text-sm flex items-center gap-3" (click)="toggleMobileMenu()">
+          <mat-icon>{{ link.icon }}</mat-icon>
+          {{ link.label }}
+        </a>
+      }
+    </nav>
+    @if (userRole() === 'GUEST') {
+      <button routerLink="/login" (click)="toggleMobileMenu()" class="w-full bg-edutrack-primary text-white py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em]">
+        Connexion
+      </button>
+    } @else {
+      <button (click)="logout()" class="w-full border-2 border-rose-100 text-rose-500 py-4 rounded-2xl font-black text-xs uppercase tracking-[0.2em]">
+        Quitter
+      </button>
+    }
+  </div>
+}

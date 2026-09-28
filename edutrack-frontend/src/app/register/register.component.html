@@ -1,0 +1,101 @@
+<div class="h-full bg-white flex flex-col lg:flex-row overflow-hidden">
+  <div class="lg:w-1/2 p-6 md:p-12 lg:p-20 flex flex-col justify-center bg-slate-50">
+    <div class="max-w-md mx-auto w-full animate-fade-in">
+      <div class="flex items-center gap-4 mb-8">
+        <div class="w-10 h-10 bg-slate-900 text-white rounded-2xl flex items-center justify-center shadow-lg">
+          <mat-icon class="!text-sm">school</mat-icon>
+        </div>
+        <span class="text-xl font-black tracking-tighter text-slate-900 uppercase">EduTrack</span>
+      </div>
+
+      <h1 class="text-4xl font-heading font-black text-slate-900 mb-2 tracking-tight leading-tight">
+        Creez votre espace.
+      </h1>
+      <p class="text-slate-500 font-medium text-sm mb-8">Inscrivez-vous comme etudiant ou enseignant.</p>
+
+      <form [formGroup]="registerForm" class="space-y-4">
+        <div class="grid grid-cols-2 gap-4">
+          <label class="space-y-1">
+            <span class="label">Prenom</span>
+            <input type="text" formControlName="firstName" placeholder="Sami" class="input">
+          </label>
+          <label class="space-y-1">
+            <span class="label">Nom</span>
+            <input type="text" formControlName="lastName" placeholder="Bennani" class="input">
+          </label>
+        </div>
+
+        <label class="space-y-1 block">
+          <span class="label">Email</span>
+          <input type="email" formControlName="email" placeholder="sami@example.com" class="input">
+        </label>
+
+        <label class="space-y-1 block">
+          <span class="label">Mot de passe</span>
+          <div class="relative">
+            <input [type]="hidePassword ? 'password' : 'text'" formControlName="password" placeholder="Password123" class="input pr-12">
+            <button type="button" (click)="hidePassword = !hidePassword" class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400">
+              <mat-icon class="!text-sm">{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+          </div>
+          <p class="text-[10px] text-slate-400 font-bold">Minimum 8 caracteres, une majuscule et un chiffre.</p>
+        </label>
+      </form>
+    </div>
+  </div>
+
+  <div class="lg:w-1/2 p-6 md:p-12 lg:p-20 flex flex-col justify-center bg-white">
+    <div class="max-w-md mx-auto w-full animate-fade-in delay-100">
+      <h2 class="text-2xl font-black text-slate-900 mb-2 tracking-tight">Votre role</h2>
+      <p class="text-slate-500 font-medium text-sm mb-8">Choisissez votre parcours dans la plateforme.</p>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="space-y-6">
+        <div class="flex flex-col gap-3">
+          <button type="button"
+            (click)="registerForm.get('role')?.setValue('STUDENT')"
+            [class]="registerForm.get('role')?.value === 'STUDENT' ? 'border-edutrack-primary bg-indigo-50/50 text-edutrack-primary ring-4 ring-indigo-50' : 'border-slate-100 bg-white text-slate-500'"
+            class="flex items-center gap-4 p-4 rounded-[24px] border-2 transition-all hover:border-edutrack-primary text-left group">
+            <div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-sm">
+              <mat-icon class="!text-xl">school</mat-icon>
+            </div>
+            <div class="flex-1">
+              <span class="block font-black text-base">Etudiant</span>
+              <span class="text-[10px] font-medium opacity-60 italic leading-none">Consulter, s'inscrire et suivre sa progression.</span>
+            </div>
+            <mat-icon *ngIf="registerForm.get('role')?.value === 'STUDENT'" class="!text-sm">check_circle</mat-icon>
+          </button>
+
+          <button type="button"
+            (click)="registerForm.get('role')?.setValue('TEACHER')"
+            [class]="registerForm.get('role')?.value === 'TEACHER' ? 'border-edutrack-accent bg-emerald-50/50 text-edutrack-accent ring-4 ring-emerald-50' : 'border-slate-100 bg-white text-slate-500'"
+            class="flex items-center gap-4 p-4 rounded-[24px] border-2 transition-all hover:border-edutrack-accent text-left group">
+            <div class="w-12 h-12 rounded-xl bg-white flex items-center justify-center shadow-sm">
+              <mat-icon class="!text-xl">co_present</mat-icon>
+            </div>
+            <div class="flex-1">
+              <span class="block font-black text-base">Enseignant</span>
+              <span class="text-[10px] font-medium opacity-60 italic leading-none">Creer des cours et suivre les inscriptions.</span>
+            </div>
+            <mat-icon *ngIf="registerForm.get('role')?.value === 'TEACHER'" class="!text-sm">check_circle</mat-icon>
+          </button>
+        </div>
+
+        <div *ngIf="errorMessage" class="p-3 bg-red-50 text-red-600 rounded-xl flex items-center gap-2 animate-shake text-xs font-bold">
+          <mat-icon class="!text-sm">error_outline</mat-icon>
+          <span>{{ errorMessage }}</span>
+        </div>
+
+        <button type="submit" [disabled]="submitting"
+          class="w-full py-4 bg-slate-900 text-white rounded-[24px] font-black uppercase tracking-[0.2em] shadow-xl hover:bg-edutrack-primary hover:-translate-y-1 active:scale-95 transition-all disabled:opacity-30 disabled:translate-y-0 text-sm">
+          <span *ngIf="!submitting">S'inscrire</span>
+          <span *ngIf="submitting">Patientez...</span>
+        </button>
+
+        <p *ngIf="!isAuthenticated()" class="text-center text-slate-400 text-xs font-medium">
+          Deja membre ?
+          <a routerLink="/login" class="text-slate-900 font-black hover:underline ml-1">Se connecter</a>
+        </p>
+      </form>
+    </div>
+  </div>
+</div>

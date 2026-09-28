@@ -1,0 +1,32 @@
+# Local tooling and generated output
+.claude/
+.dist/
+
+# Secrets and local environment files
+**/serviceAccountKey.json
+**/.env
+**/.env.*
+!**/.env.example
+
+# Java build and local databases
+**/target/
+**/data/
+*.mv.db
+*.trace.db
+
+# Frontend dependencies and build output
+**/node_modules/
+**/dist/
+**/.angular/
+**/.firebase/
+
+# Runtime logs
+*.log
+*.err
+
+# IDE and OS files
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+
