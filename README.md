@@ -1,175 +1,107 @@
 # EduTrack
 
-## Description
+Application web de gestion de cours en ligne avec parcours distincts pour les
+administrateurs, les enseignants et les étudiants.
 
-EduTrack est une application Angular + Spring Boot pour la gestion de cours en ligne. Elle permet de gerer les utilisateurs, les cours, les categories, les inscriptions, la progression et les dashboards selon les roles `ADMIN`, `TEACHER` et `STUDENT`.
+## Fonctionnalités
 
-## Technologies utilisees
+- Authentification JWT et contrôle d’accès par rôles `ADMIN`, `TEACHER` et
+  `STUDENT`.
+- Gestion des utilisateurs, catégories, cours et inscriptions.
+- Suivi de progression et tableaux de bord adaptés à chaque rôle.
+- Documentation interactive de l’API avec OpenAPI et Swagger UI.
 
-- Angular 19 standalone
-- Angular Material
-- Reactive Forms
-- HttpClient
-- Spring Boot
-- Spring Security JWT
-- Spring Data JPA
-- H2 Database
+## Stack
 
-## Architecture frontend
+- Backend : Java 21, Spring Boot, Spring Security, Spring Data JPA, H2 et
+  PostgreSQL.
+- Frontend : Angular 19, Angular Material, Chart.js et TypeScript.
+- Services : Firebase Admin et Firebase côté client.
 
-```text
-edutrack-frontend/src/app/
-  core/
-    guards/
-      auth.guard.ts
-      role.guard.ts
-    models/
-      auth.model.ts
-      category.model.ts
-      course.model.ts
-      dashboard.model.ts
-      enrollment.model.ts
-      user.model.ts
-    services/
-      auth.service.ts
-      category.service.ts
-      course.service.ts
-      dashboard.service.ts
-      enrollment.service.ts
-      user.service.ts
-  shared/
-    components/
-    material/
-  layouts/
-    main-layout/
-  features/
-    auth/
-    courses/
-    categories/
-    users/
-    enrollments/
-    dashboards/
+## Architecture
+
+```mermaid
+flowchart LR
+    Browser[Angular SPA] -->|HTTP / JSON| API[Spring Boot REST API]
+    API --> Security[Spring Security + JWT]
+    API --> Services[Services métier]
+    Services --> JPA[Spring Data JPA]
+    JPA --> DB[(H2 ou PostgreSQL)]
+    API --> Firebase[Firebase Admin]
 ```
 
-## Architecture backend
+Le frontend sépare les fonctionnalités, composants partagés, modèles, guards
+et services HTTP. Le backend organise les contrôleurs, DTO, entités,
+repositories, services, sécurité et gestion des erreurs par responsabilité.
 
-```text
-edutrack-backend/src/main/java/com/edutrack/edutrack/
-  config/
-  controller/
-  dto/
-  entity/
-  enums/
-  exception/
-  repository/
-  security/
-  service/
-```
+## Installation
 
-Entites metier conservees : `User`, `Category`, `Course`, `Enrollment`.
-Tables techniques conservees pour l'authentification : `refresh_tokens`, `password_reset_tokens`.
-
-## Fonctionnalites principales
-
-- Authentification par email et mot de passe.
-- Gestion des roles : `ADMIN`, `TEACHER`, `STUDENT`.
-- Routes protegees avec `AuthGuard` et `RoleGuard`.
-- CRUD complet sur `Course` : liste, detail, ajout, modification, suppression.
-- Formulaires Angular ReactiveForms pour les cours.
-- Relations visibles : `Course -> Category`, `Course -> Teacher`, `Enrollment -> Student + Course`.
-- Gestion des categories, utilisateurs et inscriptions.
-- Dashboards separes pour admin, enseignant et etudiant.
-
-## Endpoints finaux
-
-```text
-POST   /api/auth/login
-POST   /api/auth/register
-POST   /api/auth/refresh
-POST   /api/auth/logout
-GET    /api/users
-GET    /api/categories
-POST   /api/categories
-GET    /api/courses
-GET    /api/courses/{id}
-POST   /api/courses
-PUT    /api/courses/{id}
-DELETE /api/courses/{id}
-GET    /api/enrollments
-POST   /api/enrollments
-PUT    /api/enrollments/{id}/progress
-GET    /api/dashboard/admin
-GET    /api/dashboard/teacher
-GET    /api/dashboard/student
-```
-
-## Lancer le backend
+Prérequis : Java 21, Node.js 20 et npm.
 
 ```bash
-cd edutrack-backend
-.\mvnw.cmd spring-boot:run -Dspring-boot.run.arguments=--server.port=8081
-```
-
-API REST :
-
-```text
-http://localhost:8081/api
-```
-
-## Lancer le frontend
-
-```bash
-cd edutrack-frontend
-npm install
-npm run start
-```
-
-Application Angular :
-
-```text
-http://localhost:4200
-```
-
-## Build et tests
-
-```bash
-cd edutrack-frontend
+git clone https://github.com/KhaledZouari/edutrack.git
+cd edutrack/edutrack-frontend
+npm ci
 npm run build
 ```
 
 ```bash
-cd edutrack-backend
-.\mvnw.cmd test
+cd ../edutrack-backend
+./mvnw test
+./mvnw spring-boot:run -Dspring-boot.run.arguments=--server.port=8081
 ```
 
-## Comptes de test
+Sous Windows, remplacer `./mvnw` par `.\mvnw.cmd`. L’application Angular est
+accessible sur `http://localhost:4200` avec `npm start`; l’API et Swagger sont
+disponibles sur `http://localhost:8081/api` et
+`http://localhost:8081/swagger-ui.html`.
 
-| Role | Email | Mot de passe |
-| --- | --- | --- |
-| Admin | admin@edutrack.com | Admin123 |
-| Teacher 1 | teacher@edutrack.com | Teacher123 |
-| Teacher 2 | teacher2@edutrack.com | Teacher123 |
-| Student 1 | student@edutrack.com | Student123 |
-| Student 2 | student2@edutrack.com | Student123 |
-| Student 3 | student3@edutrack.com | Student123 |
+## Configuration
 
-## Routes Angular principales
+| Variable | Service | Description |
+|---|---|---|
+| `FIREBASE_CONFIG_JSON` | Backend | JSON du compte de service Firebase. |
 
-```text
-/login
-/admin/dashboard
-/teacher/dashboard
-/student/dashboard
-/courses
-/courses/add
-/courses/edit/:id
-/courses/details/:id
-/categories
-/users
-/enrollments
-/profile
+Le modèle est fourni dans `edutrack-backend/.env.example`. Le frontend utilise
+les fichiers d’environnement Angular; `edutrack-frontend/.env.example`
+documente les valeurs locales attendues mais n’est pas chargé automatiquement.
+
+## Tests et qualité
+
+```bash
+cd edutrack-backend && ./mvnw verify
+cd ../edutrack-frontend && npm ci && npm run build
 ```
 
-## Presentation courte
+La CI exécute ces vérifications sur chaque pull request et chaque push sur
+`main`. Le profil `test` utilise une base H2 en mémoire et désactive
+l’initialisation Firebase externe.
 
-EduTrack respecte l'enonce Angular : architecture modulaire, composants separes, services REST, guards, gestion des roles, CRUD complet sur les cours, formulaires reactifs, relations entre modeles et dashboards riches. Le projet est centre uniquement sur la gestion de cours en ligne.
+## API
+
+Les ressources principales sont exposées sous `/api/auth`, `/api/users`,
+`/api/categories`, `/api/courses`, `/api/enrollments` et `/api/dashboard`.
+La spécification complète est consultable via Swagger UI après démarrage.
+
+## Captures d’écran
+
+Les futures captures sont regroupées dans `docs/screenshots/` afin de garder
+une documentation stable et versionnée.
+
+## Choix techniques
+
+- JWT isole l’authentification de la SPA et sécurise les routes par rôle.
+- Les DTO séparent le contrat HTTP des entités persistées.
+- H2 facilite le développement local et les tests; PostgreSQL est disponible
+  comme moteur relationnel d’exécution.
+
+## Pistes d’amélioration
+
+- Ajouter des tests unitaires ciblés sur les règles de progression et de rôle.
+- Ajouter des tests d’intégration des contrôleurs et des parcours Angular.
+- Fournir une configuration Docker Compose pour l’API, le frontend et
+  PostgreSQL.
+
+## Licence
+
+Ce projet est distribué sous licence MIT. Voir [LICENSE](LICENSE).
