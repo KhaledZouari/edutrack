@@ -535,7 +535,7 @@ body {
 }
 
 .mat-mdc-form-field {
-  --mdc-outlined-text-field-container-shape: 14px;
+  --mat-form-field-outlined-container-shape: 14px;
 }
 
 .mat-mdc-menu-panel {
@@ -558,8 +558,8 @@ body {
 }
 
 .mat-mdc-progress-bar {
-  --mdc-linear-progress-track-height: 8px;
-  --mdc-linear-progress-active-indicator-height: 8px;
+  --mat-progress-bar-track-height: 8px;
+  --mat-progress-bar-active-indicator-height: 8px;
   border-radius: 999px;
   overflow: hidden;
 }

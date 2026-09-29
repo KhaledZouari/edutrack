@@ -17,7 +17,7 @@ administrateurs, les enseignants et les étudiants.
 
 - Backend : Java 21, Spring Boot, Spring Security, Spring Data JPA, H2 et
   PostgreSQL.
-- Frontend : Angular 19, Angular Material, Chart.js et TypeScript.
+- Frontend : Angular 20, Angular Material, Chart.js et TypeScript.
 - Services : Firebase Admin et Firebase côté client.
 
 ## Architecture
@@ -38,7 +38,7 @@ repositories, services, sécurité et gestion des erreurs par responsabilité.
 
 ## Installation
 
-Prérequis : Java 21, Node.js 20 et npm.
+Prérequis : Java 21, Node.js 22 et npm.
 
 ```bash
 git clone https://github.com/KhaledZouari/edutrack.git
@@ -101,9 +101,9 @@ une documentation stable et versionnée.
 
 - La suite backend vérifie le démarrage du contexte et les contraintes des DTO ;
   les règles de progression et de rôle ne sont pas encore testées isolément.
-- La migration Angular 19 vers une version corrigée est prioritaire : l’audit
-  npm remonte 31 alertes dans l’outillage, dont une critique, mais la correction
-  impose une migration majeure qui doit être testée séparément.
+- La migration Angular 19 vers Angular 20 a réduit l’audit npm de 31 à 6
+  alertes. Les migrations majeures suivantes seront traitées séparément afin de
+  conserver des changements vérifiables.
 - Ajouter des tests d’intégration des contrôleurs et des parcours Angular.
 - Fournir une configuration Docker Compose pour l’API, le frontend et
   PostgreSQL.
