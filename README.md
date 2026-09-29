@@ -1,5 +1,7 @@
 # EduTrack
 
+[![CI](https://github.com/KhaledZouari/edutrack/actions/workflows/ci.yml/badge.svg)](https://github.com/KhaledZouari/edutrack/actions/workflows/ci.yml)
+
 Application web de gestion de cours en ligne avec parcours distincts pour les
 administrateurs, les enseignants et les étudiants.
 
@@ -95,9 +97,13 @@ une documentation stable et versionnée.
 - H2 facilite le développement local et les tests; PostgreSQL est disponible
   comme moteur relationnel d’exécution.
 
-## Pistes d’amélioration
+## Limites connues et pistes d’amélioration
 
-- Ajouter des tests unitaires ciblés sur les règles de progression et de rôle.
+- La suite backend vérifie le démarrage du contexte et les contraintes des DTO ;
+  les règles de progression et de rôle ne sont pas encore testées isolément.
+- La migration Angular 19 vers une version corrigée est prioritaire : l’audit
+  npm remonte 31 alertes dans l’outillage, dont une critique, mais la correction
+  impose une migration majeure qui doit être testée séparément.
 - Ajouter des tests d’intégration des contrôleurs et des parcours Angular.
 - Fournir une configuration Docker Compose pour l’API, le frontend et
   PostgreSQL.
