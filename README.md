@@ -1,113 +1,69 @@
 # EduTrack
 
-[![CI](https://github.com/KhaledZouari/edutrack/actions/workflows/ci.yml/badge.svg)](https://github.com/KhaledZouari/edutrack/actions/workflows/ci.yml)
+A role-based online course management platform for administrators, instructors,
+and students.
 
-Application web de gestion de cours en ligne avec parcours distincts pour les
-administrateurs, les enseignants et les étudiants.
+## Features
 
-## Fonctionnalités
-
-- Authentification JWT et contrôle d’accès par rôles `ADMIN`, `TEACHER` et
-  `STUDENT`.
-- Gestion des utilisateurs, catégories, cours et inscriptions.
-- Suivi de progression et tableaux de bord adaptés à chaque rôle.
-- Documentation interactive de l’API avec OpenAPI et Swagger UI.
+- JWT authentication and role-based authorization
+- User, course, enrollment, and lesson management
+- Dedicated workflows for administrators, instructors, and students
+- Input validation and centralized API error handling
+- Swagger/OpenAPI documentation
 
 ## Stack
 
-- Backend : Java 21, Spring Boot, Spring Security, Spring Data JPA, H2 et
-  PostgreSQL.
-- Frontend : Angular 20, Angular Material, Chart.js et TypeScript.
-- Services : Firebase Admin et Firebase côté client.
+| Layer | Technology |
+| --- | --- |
+| Frontend | Angular, TypeScript |
+| Backend | Java 21, Spring Boot, Spring Security |
+| Data | PostgreSQL, H2 for local development and tests |
+| Quality | Maven, JUnit, Angular build checks, GitHub Actions |
 
 ## Architecture
 
-```mermaid
-flowchart LR
-    Browser[Angular SPA] -->|HTTP / JSON| API[Spring Boot REST API]
-    API --> Security[Spring Security + JWT]
-    API --> Services[Services métier]
-    Services --> JPA[Spring Data JPA]
-    JPA --> DB[(H2 ou PostgreSQL)]
-    API --> Firebase[Firebase Admin]
-```
+The frontend separates feature modules, shared components, models, route
+guards, and HTTP services. The backend separates controllers, DTOs, entities,
+repositories, services, security, and exception handling.
 
-Le frontend sépare les fonctionnalités, composants partagés, modèles, guards
-et services HTTP. Le backend organise les contrôleurs, DTO, entités,
-repositories, services, sécurité et gestion des erreurs par responsabilité.
+## Local setup
 
-## Installation
-
-Prérequis : Java 21, Node.js 22 et npm.
+Prerequisites: Java 21, Node.js 22, and npm.
 
 ```bash
 git clone https://github.com/KhaledZouari/edutrack.git
 cd edutrack/edutrack-frontend
 npm ci
-npm run build
+npm start
 ```
+
+In a second terminal:
 
 ```bash
-cd ../edutrack-backend
-./mvnw test
-./mvnw spring-boot:run -Dspring-boot.run.arguments=--server.port=8081
+cd edutrack/edutrack-backend
+./mvnw spring-boot:run
 ```
 
-Sous Windows, remplacer `./mvnw` par `.\mvnw.cmd`. L’application Angular est
-accessible sur `http://localhost:4200` avec `npm start`; l’API et Swagger sont
-disponibles sur `http://localhost:8081/api` et
-`http://localhost:8081/swagger-ui.html`.
+On Windows, use `.\mvnw.cmd`. The frontend runs at
+`http://localhost:4200`; the API and Swagger UI run under
+`http://localhost:8081/api`.
 
 ## Configuration
 
-| Variable | Service | Description |
-|---|---|---|
-| `FIREBASE_CONFIG_JSON` | Backend | JSON du compte de service Firebase. |
+Copy the documented values from `edutrack-backend/.env.example`. Angular
+environment files contain frontend configuration; never place private
+credentials in browser-exposed variables.
 
-Le modèle est fourni dans `edutrack-backend/.env.example`. Le frontend utilise
-les fichiers d’environnement Angular; `edutrack-frontend/.env.example`
-documente les valeurs locales attendues mais n’est pas chargé automatiquement.
-
-## Tests et qualité
+## Verification
 
 ```bash
 cd edutrack-backend && ./mvnw verify
 cd ../edutrack-frontend && npm ci && npm run build
 ```
 
-La CI exécute ces vérifications sur chaque pull request et chaque push sur
-`main`. Le profil `test` utilise une base H2 en mémoire et désactive
-l’initialisation Firebase externe.
+CI runs these checks on pushes and pull requests targeting `main`.
 
-## API
+## License
 
-Les ressources principales sont exposées sous `/api/auth`, `/api/users`,
-`/api/categories`, `/api/courses`, `/api/enrollments` et `/api/dashboard`.
-La spécification complète est consultable via Swagger UI après démarrage.
+Distributed under the MIT License. See [LICENSE](LICENSE).
 
-## Captures d’écran
-
-Les futures captures sont regroupées dans `docs/screenshots/` afin de garder
-une documentation stable et versionnée.
-
-## Choix techniques
-
-- JWT isole l’authentification de la SPA et sécurise les routes par rôle.
-- Les DTO séparent le contrat HTTP des entités persistées.
-- H2 facilite le développement local et les tests; PostgreSQL est disponible
-  comme moteur relationnel d’exécution.
-
-## Limites connues et pistes d’amélioration
-
-- La suite backend vérifie le démarrage du contexte et les contraintes des DTO ;
-  les règles de progression et de rôle ne sont pas encore testées isolément.
-- La migration Angular 19 vers Angular 20 a réduit l’audit npm de 31 à 6
-  alertes. Les migrations majeures suivantes seront traitées séparément afin de
-  conserver des changements vérifiables.
-- Ajouter des tests d’intégration des contrôleurs et des parcours Angular.
-- Fournir une configuration Docker Compose pour l’API, le frontend et
-  PostgreSQL.
-
-## Licence
-
-Ce projet est distribué sous licence MIT. Voir [LICENSE](LICENSE).
