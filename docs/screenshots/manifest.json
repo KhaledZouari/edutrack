@@ -1,0 +1,18 @@
+{
+  "captured_on": "2026-10-03",
+  "kind": "runtime screenshots",
+  "images": [
+    {
+      "file": "course-catalog.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "4dcc07c5d5f712cf994ae35e9390daac415a0333bb3124b2aa0f10a8629b1bb9"
+    },
+    {
+      "file": "admin-dashboard.png",
+      "width": 1440,
+      "height": 1000,
+      "sha256": "fd002892ca9df3711e255ebf77de2c2cbf6c57e4a02de74cf543615dbf39d1ee"
+    }
+  ]
+}
