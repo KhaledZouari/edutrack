@@ -36,7 +36,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^20.3.37",
-    "@angular/cli": "^20.3.37",
+    "@angular/cli": "^20.3.39",
     "@angular/compiler-cli": "^20.3.32",
     "@types/node": "^20.0.0",
     "autoprefixer": "^10.5.0",
